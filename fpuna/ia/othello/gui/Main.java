@@ -3,14 +3,16 @@
  * and open the template in the editor.
  */
 
-package fpuna.ia.othello;
+package fpuna.ia.othello.gui;
+
 
 /**
  *
  * @author gusamasan
  */
-public class Inicio {
-    public static void main( String[] agrm ){
-        System.out.println( "Hola mundo..." );
+public class Main {
+
+    public static void main( String argv[] ){
+        OthelloGUI gui = new OthelloGUI();
     }
 }
