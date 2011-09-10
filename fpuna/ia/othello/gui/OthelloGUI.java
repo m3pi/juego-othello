@@ -56,7 +56,7 @@ public class OthelloGUI extends JFrame{
         //pestanias.setSize( 300, 300 );
         
         panelJuego = makeTextPanel("Panel #1");
-        pestanias.addTab("Juego", null, panelJuego,"Does nothing");
+        pestanias.addTab("Juego", null, new TableroGUI(),"Does nothing");
 
         pestanias.setMnemonicAt(0, KeyEvent.VK_1);
 
