@@ -4,7 +4,6 @@
 
 package fpuna.ia.othello.gui;
 
-import java.awt.*;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 
