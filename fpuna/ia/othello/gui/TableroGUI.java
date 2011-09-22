@@ -3,7 +3,12 @@
 
 package fpuna.ia.othello.gui;
 
+import fpuna.ia.othello.Utils.Casilla;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.*;
 
@@ -21,13 +26,18 @@ public class TableroGUI extends JPanel{
     public static final int   CANTIDAD_COLUMNAS_DEFECTO = 8;
 
     private Escaque[][] contenedorEscaques;
+
+    public static final int HUMANO = 1;
+    public static final int MAQUINA = 2;
+    public int turno;
     
 // ------------------------------------------------------------------------
 
     /** Constructores *****************************************************/
     public TableroGUI(){
         super();
-        
+
+        turno = HUMANO;
         this.inicializar();
     }
     /**********************************************************************/
@@ -54,6 +64,7 @@ public class TableroGUI extends JPanel{
         this.contenedorEscaques[3][4].mostrarFichaNegra();
         this.contenedorEscaques[4][3].mostrarFichaNegra();
         this.contenedorEscaques[4][4].mostrarFichaBlanca();
+        agregarManejadorDeClick();
     }
 
     private void rellenarTablero(){
@@ -85,4 +96,168 @@ public class TableroGUI extends JPanel{
             }
         }
     }
+
+    private void agregarManejadorDeClick() {
+        for( int fila= 0; fila < this.cantidadFilas; fila++ ){
+            for( int columna= 0; columna < this.cantidadColumnas; columna++ ){
+                final int f = fila;
+                final int c = columna;
+                contenedorEscaques[fila][columna].addMouseListener( new MouseListener() {
+
+                    public void mouseClicked(MouseEvent e) {
+                            Casilla cas = new Casilla(f,c);
+                            comprobarJugada(cas);
+                    }
+
+                    public void mousePressed(MouseEvent e) {
+
+                    }
+
+                    public void mouseReleased(MouseEvent e) {
+
+                    }
+
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    public void mouseExited(MouseEvent e) {
+
+                    }
+                });
+            }
+        }
+    }
+    private void comprobarJugada(Casilla cas) {
+        if (ponerFicha(cas)) {
+            //actualizar tablero en el GUI
+            repaint();
+            cambiarTurno();
+        }
+    }
+
+    public void cambiarTurno() {
+      if (turno==HUMANO)
+         turno = MAQUINA;
+      else
+         turno = HUMANO;
+   }
+
+    public boolean ponerFicha(Casilla cas) {
+   	  ArrayList pivotes;
+   	  Iterator it;
+          Icon icon =  null;
+          if (turno == HUMANO)
+              icon = new ImageIcon( Main.class.getClassLoader().getResource("fpuna/ia/recurso/negro001.png" ));
+          else
+              icon = new ImageIcon( Main.class.getClassLoader().getResource("fpuna/ia/recurso/blanco001.png" ));
+
+   	  //comprobar que el destino está vacío
+   	  if (contenedorEscaques[cas.fila][cas.col].getIcon() != null)
+   	     return false;
+
+   	  //buscar la/s ficha/s que hace/n de pivote
+   	  pivotes = crearListaPivotes(cas, icon);
+
+   	  //si no hay pivotes, el movimiento no es válido
+   	  if (pivotes.isEmpty())
+   	     return false;
+
+   	  //si hay pivotes, se deben cambiar de color las fichas entre la posición
+   	  //actual y cada uno de los pivotes
+   	  it = pivotes.iterator();
+   	  while (it.hasNext()) {
+   	     voltearFichas(cas, (Casilla)it.next(),icon);
+   	  }
+
+   	  //colocar la nueva ficha en el tablero
+          if (turno == HUMANO)
+              contenedorEscaques[cas.fila][cas.col].mostrarFichaNegra();
+          else
+              contenedorEscaques[cas.fila][cas.col].mostrarFichaBlanca();
+   	  return true;
+   }
+
+    private ArrayList crearListaPivotes(Casilla cas, Icon icon) {
+   	  ArrayList pivotes;
+   	  Casilla piv;
+   	  int incFila, incCol;
+
+   	  pivotes = new ArrayList();
+   	  //recorrer las 8 direcciones posibles
+   	  for (incFila=-1; incFila<=1; incFila++)
+   	     for (incCol=-1; incCol<=1; incCol++)
+   	        if ((incCol!=0)||(incFila!=0)) {
+   	           //buscar un pivote en esa dirección
+   	           piv = buscarPivote(cas, incFila, incCol, icon);
+   	           if (piv!=null)
+   	              pivotes.add(piv);
+   	        }
+
+      return pivotes;
+   }
+
+    private Casilla buscarPivote(Casilla cas, int incFila, int incCol, Icon icon) {
+   	  int f,c;
+
+          //a partir de dónde se empieza a buscar el pivote
+   	  f = cas.fila + incFila;
+   	  c = cas.col + incCol;
+
+   	  //no buscar el pivote fuera del tablero
+   	  if ((f<0)||(f>7)||(c<0)||(c>7))
+   	     return null;
+
+   	  //tiene que haber al menos una ficha del color contrario que "flanquear"
+   	  //entre la nueva ficha y el pivote
+   	  if ((contenedorEscaques[f][c].getIcon() == null)||((contenedorEscaques[f][c].getIcon().toString().compareTo(icon.toString()) == 0)))
+   	     return null;
+
+   	  //buscar y devolver posición del pivote
+   	  while ((f>=0)&&(f<8)&&(c>=0)&&(c<8)) {
+         //hemos llegado a una casilla vacía, no hay pivote
+   	     if (contenedorEscaques[f][c].getIcon() == null)
+   	        return null;
+   	     //pivote encontrado (ficha del mismo color)
+   	     if (contenedorEscaques[f][c].getIcon().toString().compareTo(icon.toString()) == 0)
+   	        return new Casilla(f,c);
+   	     //siguiente casilla
+             f += incFila;
+   	     c += incCol;
+   	  }
+
+   	  //no se ha encontrado pivote
+   	  return null;
+   }
+
+    private void voltearFichas(Casilla cas, Casilla pivote, Icon icon) {
+
+                  int incFila, incCol;
+                  int numFilas, numCols;
+                  int numVolteos;
+                  int i, f, c;
+
+                  numFilas = pivote.fila - cas.fila;
+                  numCols = pivote.col - cas.col;
+                  //ver la dirección del pivote con respecto a la nueva ficha
+                  if (numFilas!=0)
+                 incFila = numFilas/Math.abs(numFilas);
+              else
+                 incFila = 0;
+              if (numCols!=0)
+                 incCol = numCols/Math.abs(numCols);
+              else
+                 incCol = 0;
+
+              numVolteos = Math.max(Math.abs(numFilas), Math.abs(numCols))-1;
+              f = cas.fila;
+              c = cas.col;
+              //"dar la vuelta" a las fichas
+              for(i=0; i<numVolteos; i++)
+              {
+                 f += incFila;
+                 c += incCol;
+                 contenedorEscaques[f][c].setIcon(icon);
+              }
+   }
 }
