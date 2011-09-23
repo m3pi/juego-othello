@@ -42,6 +42,12 @@ public class TableroGUI extends JPanel{
     }
     /**********************************************************************/
 
+    private void colocarPrimerasFichas(){
+        this.contenedorEscaques[3][3].mostrarFichaBlanca();
+        this.contenedorEscaques[3][4].mostrarFichaNegra();
+        this.contenedorEscaques[4][3].mostrarFichaNegra();
+        this.contenedorEscaques[4][4].mostrarFichaBlanca();
+    }
 
     private void inicializar(){
     // ------------------------------------------------------------------------
@@ -60,13 +66,30 @@ public class TableroGUI extends JPanel{
 
         this.rellenarTablero();
 
-        this.contenedorEscaques[3][3].mostrarFichaBlanca();
-        this.contenedorEscaques[3][4].mostrarFichaNegra();
-        this.contenedorEscaques[4][3].mostrarFichaNegra();
-        this.contenedorEscaques[4][4].mostrarFichaBlanca();
+        this.colocarPrimerasFichas();
+        
         agregarManejadorDeClick();
     }
 
+
+    public void reiniciarTablero(){
+    // ------------------------------------------------------------------------
+
+        int columna, fila;
+
+    // ------------------------------------------------------------------------
+
+        for( fila =0; fila < this.cantidadFilas; fila++ ){
+            
+            for( columna =0; columna < this.cantidadColumnas; columna++ ){
+                this.contenedorEscaques[ fila ][ columna ].limpiar();
+            }
+        }
+
+        this.colocarPrimerasFichas();
+    }
+
+    
     private void rellenarTablero(){
     // ------------------------------------------------------------------------        
         int indice, fila, columna;

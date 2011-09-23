@@ -9,12 +9,16 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+import fpuna.ia.othello.gui.accion.AccionJuegoNuevo;
+
 /**
  *
  * @author gusamasan
  */
 public class OthelloGUI extends JFrame{
 // ----------------------------------------------------------------------
+
+    private TableroGUI elTablero;
 
 // ----------------------------------------------------------------------
 
@@ -51,11 +55,19 @@ public class OthelloGUI extends JFrame{
 
     // ----------------------------------------------------------------------
 
-        pestanias   = new JTabbedPane();
+        pestanias           = new JTabbedPane();
         //pestanias.setSize( 300, 300 );
         
-        panelJuego = makeTextPanel("Panel #1");
-        pestanias.addTab("Juego", null, new TableroGUI(),"Does nothing");
+        panelJuego          = makeTextPanel("Panel #1");
+
+        panelJuego          = new JPanel();
+        this.elTablero      = new TableroGUI();
+
+        panelJuego.setLayout(new BoxLayout( panelJuego, BoxLayout.PAGE_AXIS));
+        panelJuego.add( this.elTablero );
+        panelJuego.add( this.obtenerBotonNuevoJuevo() );
+        
+        pestanias.addTab("Juego", null, panelJuego ,"Does nothing");
 
         pestanias.setMnemonicAt(0, KeyEvent.VK_1);
 
@@ -109,6 +121,27 @@ public class OthelloGUI extends JFrame{
         
         
         return( panel );
+    }
+
+
+    /**
+     * Retorn el botón "nuevo juego" cuya función es reiniciar el juego
+     *
+     * @return objeto del tipo <JButton> utilizable para reiniciar el juego
+     *
+     * @autor gusamasan
+     */
+    private JButton obtenerBotonNuevoJuevo(){
+    // ----------------------------------------------------------------------
+
+        JButton boton;
+
+    // ----------------------------------------------------------------------
+
+        boton  = new JButton( "nuevo juego" );
+        boton.addActionListener( new AccionJuegoNuevo( this.elTablero ) );
+
+        return( boton );
     }
 
     public JComponent obtenerOpcionesAlgoritmo(){
