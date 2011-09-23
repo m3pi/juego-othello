@@ -46,6 +46,11 @@ public class Escaque extends JButton{
 
     private void inicializar(){
     }
+
+    public void limpiar(){
+        this.setIcon(null);
+    }
+
     private ImageIcon obtenerImagen()
     {
         return( new ImageIcon( super.getClass().getResource( "./recurso/negro.ico" ) ));
