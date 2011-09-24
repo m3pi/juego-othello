@@ -11,6 +11,8 @@ import javax.swing.*;
 
 import fpuna.ia.othello.gui.accion.AccionJuegoNuevo;
 
+import fpuna.ia.othello.Utils.Tablero;
+
 /**
  *
  * @author gusamasan
@@ -18,8 +20,9 @@ import fpuna.ia.othello.gui.accion.AccionJuegoNuevo;
 public class OthelloGUI extends JFrame{
 // ----------------------------------------------------------------------
 
-    private TableroGUI elTablero;
-
+    private TableroGUI elTableroGUI;
+    private Tablero tablero;
+    
 // ----------------------------------------------------------------------
 
     /** Constructores ***************************************************/
@@ -29,7 +32,8 @@ public class OthelloGUI extends JFrame{
         this.inicializar();
     }
     /********************************************************************/
-    
+   
+
     private void inicializar(){
     // -------------------------------------------------------------------
 
@@ -43,6 +47,8 @@ public class OthelloGUI extends JFrame{
         
         this.pack();
         this.setVisible(true);
+
+        this.tablero   = new Tablero();
     }
 
     private JTabbedPane obtenerPestanias(){
@@ -61,10 +67,10 @@ public class OthelloGUI extends JFrame{
         panelJuego          = makeTextPanel("Panel #1");
 
         panelJuego          = new JPanel();
-        this.elTablero      = new TableroGUI();
+        this.elTableroGUI      = new TableroGUI();
 
         panelJuego.setLayout(new BoxLayout( panelJuego, BoxLayout.PAGE_AXIS));
-        panelJuego.add( this.elTablero );
+        panelJuego.add( this.elTableroGUI );
         panelJuego.add( this.obtenerBotonNuevoJuevo() );
         
         pestanias.addTab("Juego", null, panelJuego ,"Does nothing");
@@ -139,7 +145,7 @@ public class OthelloGUI extends JFrame{
     // ----------------------------------------------------------------------
 
         boton  = new JButton( "nuevo juego" );
-        boton.addActionListener( new AccionJuegoNuevo( this.elTablero ) );
+        boton.addActionListener( new AccionJuegoNuevo( this.elTableroGUI ) );
 
         return( boton );
     }
