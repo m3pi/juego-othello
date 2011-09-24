@@ -13,6 +13,9 @@ package fpuna.ia.othello.Utils;
 public class Casilla{      
    // ------------------------------------------------------------------------
 
+    private boolean blancoHabilitado    ,
+                    negroHabilitado;
+
     public int fila;
     public int col;
 
@@ -27,14 +30,62 @@ public class Casilla{
     /** Constructores ****************************************************/
     public Casilla(){
         this.colorFicha = Casilla.FICHA_TRANSPARENTE;
+
+        this.blancoHabilitado   = false;
+        this.negroHabilitado    = false;
     }
 
     public Casilla(int fila, int col){
       this.fila = fila;
-      this.col = col;
+      this.col  = col;
+      this.colorFicha = Casilla.FICHA_TRANSPARENTE;
+
+      this.blancoHabilitado   = false;
+      this.negroHabilitado    = false;
     }
     /*********************************************************************/
 
+
+    public void deshabilitar(){
+        this.blancoHabilitado   = false;
+        this.negroHabilitado    = false;
+    }
+
+    /**
+     * Indica si la casilla está habilitada o no para colocar en ella una ficha
+     * BLANCA
+     *
+     * @return <code>true</code> si está habilitada; <code>false</code> en caso contrario
+     *
+     * @autor gusamasan
+     */
+    public boolean  fichaBlancaHabilitada(){
+        return( this.blancoHabilitado );
+    }
+
+
+    /**
+     * Indica si la casilla está habilitada o no para colocar en ella una ficha
+     * NEGRA
+     *
+     * @return <code>true</code> si está habilitada; <code>false</code> en caso contrario
+     *
+     * @autor gusamasan
+     */
+    public boolean fichaNegraHabilitada(){
+        return( this.fichaNegraHabilitada() );
+    }
+
+    /**
+     * Indica si la casilla está habilitada o no para colocar en ella una ficha
+     *
+     * @return <code>true</code> si está habilitada; <code>false</code> en caso contrario
+     *
+     * @autor gusamasan
+     */
+    public boolean estaHabilitada(){
+        return( this.fichaBlancaHabilitada() || this.fichaNegraHabilitada() );
+    }
 
     /**
      * Indica si la casilla representa o no a una ficha negra
@@ -88,6 +139,7 @@ public class Casilla{
      */
     public void asignarFichaBlanca(){
         this.colorFicha = Casilla.FICHA_BLANCA;
+        this.deshabilitar();
     }
 
     /**
@@ -97,6 +149,38 @@ public class Casilla{
      */
     public void asignarFichaNegra(){
         this.colorFicha = Casilla.FICHA_NEGRA;
+        this.deshabilitar();   
+    }
+
+
+    /**
+     * Retorna el color asignado a la ficha de esta casilla
+     *
+     * @return <code>short</code> que representa el color
+     */
+    public short obtenerColorFicha(){
+    // ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+
+        return( this.colorFicha );
+    }
+
+    /**
+     * Indica si la Casilla pasada como parAmetro tiene el mismo color de ficha
+     * que la asignada a esta casilla
+     *
+     * @param   objeto <code>Casilla</code> que representa la casilla cuyo color
+     *          se desea comparar
+     * 
+     * @return  <code>true</code> si tienen fichas con el mismo color;<code>false</code>
+     *          en caso contrario
+     */
+    public boolean tieneElMismoColorDe( Casilla otraCasilla ){
+
+        if( this.colorFicha == otraCasilla.obtenerColorFicha() )
+            return( true );
+        else
+            return( false );
     }
 
 
