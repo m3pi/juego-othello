@@ -13,13 +13,12 @@ package fpuna.ia.othello.Utils;
 public class Casilla{      
    // ------------------------------------------------------------------------
 
-    private boolean blancoHabilitado    ,
-                    negroHabilitado;
+    private boolean blancoHabilitado,negroHabilitado;
 
     public int fila;
     public int col;
 
-    public static short FICHA_NEGRA         = 0;
+    public static short FICHA_NEGRA         = -1;
     public static short FICHA_BLANCA        = 1;
     public static short FICHA_TRANSPARENTE  = 2;
 
@@ -197,4 +196,6 @@ public class Casilla{
         else
             this.colorFicha = Casilla.FICHA_BLANCA;
     }
+
+   
 }
