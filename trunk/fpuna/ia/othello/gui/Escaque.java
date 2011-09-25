@@ -4,6 +4,8 @@
 package fpuna.ia.othello.gui;
 import javax.swing.*;
 
+import fpuna.ia.othello.Utils.Casilla;
+
 /**
  *
  * @author gusamasan
@@ -14,34 +16,7 @@ public class Escaque extends JButton{
 // ------------------------------------------------------------------------
 
     public Escaque(){
-        super();
-        /*this.addMouseListener(new MouseListener() {
-
-            public void mouseClicked(MouseEvent e) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            public void mouseExited(MouseEvent e) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });*/
-        //super( "", new ImageIcon( Main.class.getClassLoader().getResource("fpuna/ia/recurso/negro001.png" ) ) );
-
-        //ImageIcon img = new ImageIcon( getClass().getResource( "../../recurso/negro.ico" ) );
-
-        //this.imageUpdate( Toolkit.getDefaultToolkit().getImage(getClass().getResource( "fpuna/ia/recurso/negro.ico" )), 1, 5, 5, 5, 5 );
+        super();      
     }
 
     private void inicializar(){

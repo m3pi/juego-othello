@@ -21,7 +21,7 @@ public class Casilla{
 
     public static short FICHA_NEGRA         = 0;
     public static short FICHA_BLANCA        = 1;
-    public static short FICHA_TRANSPARENTE  = 0 ;
+    public static short FICHA_TRANSPARENTE  = 2;
 
     private short   colorFicha;
 
