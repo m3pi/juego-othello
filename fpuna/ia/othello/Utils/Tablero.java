@@ -275,4 +275,36 @@ public class Tablero {
               }
    }
 
+
+     public boolean  GameOver()
+    {
+        if (CanPlay(Casilla.FICHA_NEGRA) || CanPlay(Casilla.FICHA_BLANCA))
+            return false;
+        else
+            return true;
+    }
+
+    public boolean  CanPlay(int player)
+      {
+        int x;
+        int y;
+
+        for (x = 0; x < CANTIDAD_FILAS_DEFECTO; x++)
+        {
+            for (y = 0; y < CANTIDAD_COLUMNAS_DEFECTO; y++)
+            {    Casilla cas=new Casilla(x,y);
+                 if (Casilla.FICHA_BLANCA==player)
+                 { cas.asignarFichaBlanca();
+                 }
+                 if (Casilla.FICHA_NEGRA==player) {
+                    cas.asignarFichaNegra();
+                 }
+                if (ponerFicha(cas))
+                    return true;
+            }
+        }
+
+        return false;
+      }
+
 }
