@@ -21,7 +21,7 @@ public class OthelloGUI extends JFrame{
 // ----------------------------------------------------------------------
 
     private TableroGUI elTableroGUI;
-    private Tablero tablero;
+    //private Tablero tablero;
     
 // ----------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ public class OthelloGUI extends JFrame{
         this.pack();
         this.setVisible(true);
 
-        this.tablero   = new Tablero();
+        //this.tablero   = new Tablero();
     }
 
     private JTabbedPane obtenerPestanias(){

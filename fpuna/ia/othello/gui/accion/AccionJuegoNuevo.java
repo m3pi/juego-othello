@@ -30,7 +30,8 @@ public class AccionJuegoNuevo implements ActionListener{
 
     // ------------------------------------------------------------------------
 
-        this.elTablero.reiniciarTablero();
+        //this.elTablero.reiniciarTablero();
+        this.elTablero.refrescarTablerGUI();
     }
 
 }

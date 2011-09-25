@@ -12,6 +12,8 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
+import fpuna.ia.othello.Utils.Tablero;
+
 /**
  *
  * @author gusamasan
@@ -22,14 +24,16 @@ public class TableroGUI extends JPanel{
     private int cantidadColumnas    ,
                 cantidadFilas;
 
+    public int turno;
+
     public static final int   CANTIDAD_FILAS_DEFECTO    = 8;
     public static final int   CANTIDAD_COLUMNAS_DEFECTO = 8;
+    public static final int HUMANO = 1;
+    public static final int MAQUINA = 2;
 
     private Escaque[][] contenedorEscaques;
 
-    public static final int HUMANO = 1;
-    public static final int MAQUINA = 2;
-    public int turno;
+    private Tablero tablero;
     
 // ------------------------------------------------------------------------
 
@@ -38,6 +42,8 @@ public class TableroGUI extends JPanel{
         super();
 
         turno = HUMANO;
+
+        this.tablero    = new Tablero();
         this.inicializar();
     }
     /**********************************************************************/
@@ -71,7 +77,44 @@ public class TableroGUI extends JPanel{
         agregarManejadorDeClick();
     }
 
+    public Tablero getTablero(){
+        return( this.tablero );
+    }
 
+    public void setTablero( Tablero pTablero ){
+        this.tablero    = pTablero;
+    }
+
+    public void refrescarTablerGUI(){
+    // ------------------------------------------------------------------------
+
+        int columna, fila;
+
+        Casilla[][] matrizTablero;
+
+    // ------------------------------------------------------------------------
+
+        
+        matrizTablero   = this.tablero.getMatrizTablero();
+
+        for( fila =0; fila < this.cantidadFilas; fila++ ){
+
+            for( columna =0; columna < this.cantidadColumnas; columna++ ){
+
+                if( !matrizTablero[ fila ][ columna ].estaVacia() ){
+                    if( matrizTablero[ fila ][ columna ].esNegra() )
+                        this.contenedorEscaques[ fila ][ columna ].mostrarFichaNegra();
+                    else
+                        this.contenedorEscaques[ fila ][ columna ].mostrarFichaBlanca();
+                }
+                else
+                    this.contenedorEscaques[ fila ][ columna ].limpiar();
+
+            }
+        }
+        
+    }
+    
     public void reiniciarTablero(){
     // ------------------------------------------------------------------------
 
