@@ -45,6 +45,7 @@ public class TableroGUI extends JPanel{
 
         this.tablero    = new Tablero();
         this.inicializar();
+        this.habilitarDeshabilitarTablero( false );
     }
     /**********************************************************************/
 
@@ -103,12 +104,12 @@ public class TableroGUI extends JPanel{
 
                 if( !matrizTablero[ fila ][ columna ].estaVacia() ){
                     if( matrizTablero[ fila ][ columna ].esNegra() )
-                        this.contenedorEscaques[ fila ][ columna ].mostrarFichaNegra();
+                        this.contenedorEscaques[ fila ][ columna ].mostrarFichaNegra();                    
                     else
-                        this.contenedorEscaques[ fila ][ columna ].mostrarFichaBlanca();
+                        this.contenedorEscaques[ fila ][ columna ].mostrarFichaBlanca();                    
                 }
                 else
-                    this.contenedorEscaques[ fila ][ columna ].limpiar();
+                    this.contenedorEscaques[ fila ][ columna ].limpiar();                
 
             }
         }
@@ -146,17 +147,18 @@ public class TableroGUI extends JPanel{
 
         // Agregando primera lInea (letras)
         for( indice=0; indice < this.cantidadFilas; indice++ )
-            this.add( new JLabel("" + abecedario[ indice ]) );
+            this.add( new JLabel("" + abecedario[ indice ], JLabel.CENTER ) );
 
         // Agregando los escaques (como botones por defecto)
         for( fila= 0; fila < this.cantidadFilas; fila++ ){
             
             // Agregando primera columna (nUmeros)
-            this.add( new JLabel( "" + ( fila + 1 ) ) );
+            this.add( new JLabel( "" + ( fila + 1 ), JLabel.RIGHT ) );
             for( columna= 0; columna < this.cantidadColumnas; columna++ ){
                 
                     unEscaque   = new Escaque();
-                    this.contenedorEscaques[ fila ][ columna ] = unEscaque;
+                    //unEscaque.setBackground( new java.awt.Color( 255, 255, 255 ) );
+                    this.contenedorEscaques[ fila ][ columna ] = unEscaque;                    
                     this.add( unEscaque );
                     
             }
@@ -295,6 +297,35 @@ public class TableroGUI extends JPanel{
    	  //no se ha encontrado pivote
    	  return null;
    }
+
+    public void deshabilitarTablero(){
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+        this.habilitarDeshabilitarTablero( false );
+    }
+
+    public void habilitarTablero(){
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+        this.habilitarDeshabilitarTablero( true );
+    }
+
+
+    private void habilitarDeshabilitarTablero( boolean habilitado ){
+    // ------------------------------------------------------------------------
+
+        int columna, fila;
+
+    // ------------------------------------------------------------------------
+
+        for( fila=0; fila < this.cantidadFilas; fila++ ){
+            for( columna=0; columna < this.cantidadColumnas; columna++ ){
+                this.contenedorEscaques[ fila ][ columna ].setEnabled( habilitado );                
+            }
+        }
+    }
 
     private void voltearFichas(Casilla cas, Casilla pivote, Icon icon) {
 
