@@ -12,13 +12,14 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
+import fpuna.ia.othello.GUI;
 import fpuna.ia.othello.Utils.Tablero;
 
 /**
  *
  * @author gusamasan
  */
-public class TableroGUI extends JPanel{
+public class TableroGUI extends JPanel implements GUI{
 // ------------------------------------------------------------------------
 
     private int cantidadColumnas    ,
@@ -84,6 +85,10 @@ public class TableroGUI extends JPanel{
 
     public void setTablero( Tablero pTablero ){
         this.tablero    = pTablero;
+    }
+
+    public void refrescarTablero(){
+        this.refrescarTablerGUI();
     }
 
     public void refrescarTablerGUI(){
