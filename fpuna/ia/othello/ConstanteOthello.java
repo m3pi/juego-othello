@@ -26,6 +26,6 @@ public class ConstanteOthello {
     public static String FICHA_BLANCA               = "BLANCA";
 
     // Turnos
-    public static short TURNO_FICHA_NEGRA           = 0;
+    public static short TURNO_FICHA_NEGRA           = -1;
     public static short TURNO_FICHA_BLANCA          = 1;
 }
