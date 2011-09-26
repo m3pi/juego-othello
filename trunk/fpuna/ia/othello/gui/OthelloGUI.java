@@ -9,10 +9,12 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+import fpuna.ia.othello.ConstanteOthello;
 import fpuna.ia.othello.gui.accion.AccionJuegoNuevo;
 import fpuna.ia.othello.gui.accion.AccionConfiguracionLista;
+import fpuna.ia.othello.jugador.*;
 
-import fpuna.ia.othello.Utils.Tablero;
+import fpuna.ia.othello.Juego;
 
 /**
  *
@@ -21,27 +23,42 @@ import fpuna.ia.othello.Utils.Tablero;
 public class OthelloGUI extends JFrame{
 // ----------------------------------------------------------------------
 
+    private short   turno;
+
+    private boolean pararJuego;
+
     private TableroGUI elTableroGUI;
 
     private JTabbedPane pestanias;
-    
-    //private Tablero tablero;
+
+    private Juego   elJuego;
+
+    private ButtonGroup eleccionAlgoritmo       ,
+                        eleccionFichaJugadorUno ,
+                        eleccionJugadorUno      ,
+                        eleccionJugadorDos;
+
+    private JTextField  eleccionProfundidad;
     
 // ----------------------------------------------------------------------
 
     /** Constructores ***************************************************/
     public OthelloGUI(){
-        super( "Othello" );
-
+        super( "Othello" );        
+        
         this.inicializar();
     }
     /********************************************************************/
    
+    public void jugar(){
+
+        this.elJuego.start();
+    }
 
     private void inicializar(){
     // -------------------------------------------------------------------
 
-    // -------------------------------------------------------------------
+    // -------------------------------------------------------------------       
 
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         //this.setLayout( new GridLayout(1,1 ));
@@ -59,7 +76,69 @@ public class OthelloGUI extends JFrame{
         this.pack();
         this.setVisible(true);
 
+        //this.cargarConfiguracion();
         //this.tablero   = new Tablero();
+    }
+
+    public void cargarConfiguracion(){
+    // ------------------------------------------------------------------------
+
+        Jugador jugadorUno, jugadorDos;
+
+    // ------------------------------------------------------------------------
+
+        this.elJuego    = new Juego( this.elTableroGUI );
+
+        jugadorUno  = FabricaAbstractaJugador
+                        .obtenerJugador(    this.obtenerEleccionJugadorUno()    ,
+                                            this.obtenerEleccionAlgoritmo()     ,
+                                            Integer.parseInt(
+                                                        this.obtenerEleccionProfundidad()
+                                                        ));
+
+        jugadorDos  = FabricaAbstractaJugador
+                        .obtenerJugador(    this.obtenerEleccionJugadorDos()    ,
+                                            this.obtenerEleccionAlgoritmo()     ,
+                                            Integer.parseInt(
+                                                        this.obtenerEleccionProfundidad()
+                                                        ));
+
+        jugadorUno.setTablero( this.elTableroGUI.getTablero() );
+        jugadorDos.setTablero( this.elTableroGUI.getTablero() );
+
+        if( this.eleccionFichaJugadorUno.getSelection()
+                .getActionCommand()
+                .equals( ConstanteOthello.FICHA_NEGRA )){
+            this.elJuego.setJugadorDeTurno(         jugadorUno );
+            this.elJuego.setJugadorConFichaNegra(   jugadorUno );
+            this.elJuego.setJugadorConFichaBlanca(  jugadorDos );
+        }else{            
+
+            this.elJuego.setJugadorDeTurno(         jugadorDos );
+            this.elJuego.setJugadorConFichaNegra(   jugadorDos );
+            this.elJuego.setJugadorConFichaBlanca(  jugadorUno );
+        }
+        
+    }
+
+    public String obtenerEleccionAlgoritmo(){
+        return( this.eleccionAlgoritmo.getSelection().getActionCommand() );
+    }
+
+    public String obtenerEleccionFichaJugadorUno(){        
+        return( this.eleccionFichaJugadorUno.getSelection().getActionCommand() );
+    }
+
+    public String obtenerEleccionJugadorDos(){
+        return( this.eleccionJugadorDos.getSelection().getActionCommand() );
+    }
+
+    public String obtenerEleccionJugadorUno(){
+        return( this.eleccionJugadorUno.getSelection().getActionCommand() );
+    }
+
+    public String obtenerEleccionProfundidad(){
+        return( this.eleccionProfundidad.getText().trim() );
     }
 
     private JTabbedPane obtenerPestanias(){
@@ -105,34 +184,18 @@ public class OthelloGUI extends JFrame{
         panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ) );
         //panel.setLayout( new GridLayout( 4, 2 ) );
 
-        
-        JPanel panelJugadorUno   = this.obtenerOpcionesJugador( "Jugador (1)");
-        //panelJugadorUno.setLayout( new BoxLayout( panelJugadorUno, BoxLayout.Y_AXIS ) );
-        //panelJugadorUno.add( new JLabel("Jugador(1)") );
-        //panelJugadorUno.add( separador);
-        //panelJugadorUno.add( this.obtenerOpcionesJugador() );
 
-        JPanel panelJugadorDos   = this.obtenerOpcionesJugador( "Jugador (2)");
-        //panelJugadorDos.setLayout( new BoxLayout( panelJugadorDos, BoxLayout.Y_AXIS ) );
-        //panelJugadorDos.add( new JLabel("Jugador(2)") );
-        //panelJugadorDos.add( separador2 );
-        //panelJugadorDos.add( this.obtenerOpcionesJugador() );
-        //panelJugadorDos = this.obtenerOpcionesJugador( "Jugador (2)");
+        this.eleccionJugadorUno     = new ButtonGroup();
+        JPanel panelJugadorUno      = this.obtenerOpcionesJugador( "Jugador (1)", this.eleccionJugadorUno );
 
-        JPanel panelAlgoritmo   = this.obtenerOpcionesAlgoritmo();
-        //panelAlgoritmo.setLayout( new BoxLayout( panelAlgoritmo, BoxLayout.Y_AXIS ) );
-        //panelAlgoritmo.add( new JLabel("Algoritmo") );
-        //panelAlgoritmo.add( separador3);
-        //panelAlgoritmo.add( this.obtenerOpcionesAlgoritmo() );
+        this.eleccionJugadorDos     = new ButtonGroup();
+        JPanel panelJugadorDos      = this.obtenerOpcionesJugador( "Jugador (2)", this.eleccionJugadorDos );
+
+        JPanel panelAlgoritmo   = this.obtenerOpcionesAlgoritmo();        
 
         JPanel panelFicha   = this.obtenerOpcionesFichas();
-        //panelFicha.setLayout( new BoxLayout( panelFicha, BoxLayout.Y_AXIS ) );
-        //panelFicha.add( new JLabel("Ficha para Jugador(1)") );
-        //panelFicha.add( separador4);
-        //panelFicha.add( this.obtenerOpcionesFichas() );
 
-        JPanel panelVarios   = new JPanel();
-        //panelVarios.setLayout( new BoxLayout( panelVarios, BoxLayout.Y_AXIS ) );
+        JPanel panelVarios   = new JPanel();        
         panelVarios.setLayout( new GridLayout( 3, 1) );
         panelVarios.add(new JLabel("Varios"));
         panelVarios.add( new JSeparator() );
@@ -145,15 +208,6 @@ public class OthelloGUI extends JFrame{
         izquierda.setLayout( new GridLayout(3, 1 ) );
         derecha.setLayout( new GridLayout(2, 1 ) );
 
-        /*
-        izquierda.add( panelJugadorUno );
-        izquierda.add( panelJugadorDos );
-        izquierda.add( panelFicha );
-
-        derecha.add( panelAlgoritmo );
-        derecha.add( panelVarios );
-         *
-         */
         
         panel.add( panelJugadorUno );
         panel.add( panelJugadorDos );
@@ -162,12 +216,7 @@ public class OthelloGUI extends JFrame{
         panel.add( panelVarios );
         panel.add( new JSeparator() );
         panel.add( this.obtenerBotonConfiguracionLista() );
-        /*
-        jSplitPane1.add( izquierda );
-        jSplitPane1.add( derecha );
-
-        panel.add( jSplitPane1 );
-        */
+        
         return( panel );
     }
 
@@ -180,7 +229,7 @@ public class OthelloGUI extends JFrame{
     // ------------------------------------------------------------------------
 
         boton   = new JButton( "Listo" );
-        boton.addActionListener( new AccionConfiguracionLista( this.pestanias ) );
+        boton.addActionListener( new AccionConfiguracionLista( this, this.pestanias ) );
         
         return( boton );
     }
@@ -200,12 +249,12 @@ public class OthelloGUI extends JFrame{
     // ----------------------------------------------------------------------
 
         boton  = new JButton( "jugar" );
-        boton.addActionListener( new AccionJuegoNuevo( this.elTableroGUI ) );
+        boton.addActionListener( new AccionJuegoNuevo( this, this.elTableroGUI ) );
 
         return( boton );
     }
 
-    public JPanel obtenerOpcionesAlgoritmo(){
+    private JPanel obtenerOpcionesAlgoritmo(){
     // ----------------------------------------------------------------------
 
         JPanel panel;
@@ -213,27 +262,25 @@ public class OthelloGUI extends JFrame{
     // ----------------------------------------------------------------------
         
         panel   = new JPanel();
-        panel.setLayout( new GridLayout( 6, 1 ) );
-        //panel.setayout( new BoxLayout( panel, BoxLayout.Y_AXIS ) );
-        //panel.setPreferredSize( new java.awt.Dimension( 150, 100 ) );
+        panel.setLayout( new GridLayout( 6, 1 ) );        
 
         JRadioButton minimax = new JRadioButton( "MiniMax" );
         minimax.setMnemonic(KeyEvent.VK_M );
-        minimax.setActionCommand( "MINIMAX" );
+        minimax.setActionCommand( ConstanteOthello.ALGORITMO_MINIMAX );
         minimax.setSelected(true);
 
         JRadioButton alfaBeta = new JRadioButton( "Alfa Beta" );
         alfaBeta.setMnemonic(KeyEvent.VK_L );
-        alfaBeta.setActionCommand( "ALFABETA" );
+        alfaBeta.setActionCommand( ConstanteOthello.ALGORITMO_PODA_ALFA_BETA );
 
         JRadioButton aleatorio = new JRadioButton( "Aleatorio" );
         aleatorio.setMnemonic(KeyEvent.VK_A );
-        aleatorio.setActionCommand( "ALEATORIO" );
+        aleatorio.setActionCommand( ConstanteOthello.ALGORITMO_ALEATORIO );
 
-        ButtonGroup group = new ButtonGroup();
-        group.add( minimax      );
-        group.add( alfaBeta     );
-        group.add( aleatorio    );
+        this.eleccionAlgoritmo = new ButtonGroup();
+        this.eleccionAlgoritmo.add( minimax      );
+        this.eleccionAlgoritmo.add( alfaBeta     );
+        this.eleccionAlgoritmo.add( aleatorio    );
 
         panel.add( new JLabel( "Algoritmo" ) );
         panel.add( new JSeparator() );
@@ -245,7 +292,7 @@ public class OthelloGUI extends JFrame{
         return( panel );
     }
 
-    public JPanel obtenerOpcionesJugador( String etiqueta ){
+    private JPanel obtenerOpcionesJugador( String etiqueta, ButtonGroup grupo ){
     // ----------------------------------------------------------------------
 
         JPanel panel;
@@ -261,17 +308,17 @@ public class OthelloGUI extends JFrame{
 
         JRadioButton jugadorHumano = new JRadioButton( "Humano" );
         jugadorHumano.setMnemonic(KeyEvent.VK_O );
-        jugadorHumano.setActionCommand( "HUMANO" );
+        jugadorHumano.setActionCommand( ConstanteOthello.JUGADOR_HUMANO );
         jugadorHumano.setSelected(true);
 
         JRadioButton jugadorMaquina = new JRadioButton( "Máquina" );
         jugadorMaquina.setMnemonic(KeyEvent.VK_I );
-        jugadorMaquina.setActionCommand( "MAQUINA" );
+        jugadorMaquina.setActionCommand( ConstanteOthello.JUGADOR_MAQUINA );
 
         
-        ButtonGroup group = new ButtonGroup();
-        group.add( jugadorHumano    );
-        group.add( jugadorMaquina   );
+        //&&grupo = new ButtonGroup();
+        grupo.add( jugadorHumano    );
+        grupo.add( jugadorMaquina   );
         
 
         panel.add( new JLabel( etiqueta ) );
@@ -283,7 +330,7 @@ public class OthelloGUI extends JFrame{
         return( panel );
     }
 
-    public JPanel obtenerOpcionesFichas(){
+    private JPanel obtenerOpcionesFichas(){
     // ----------------------------------------------------------------------
 
         JPanel panel;
@@ -296,16 +343,16 @@ public class OthelloGUI extends JFrame{
 
         JRadioButton fichaNegra = new JRadioButton( "Negra" );
         fichaNegra.setMnemonic(KeyEvent.VK_N );
-        fichaNegra.setActionCommand( "FICHA_NEGRA" );
+        fichaNegra.setActionCommand( ConstanteOthello.FICHA_NEGRA );
         fichaNegra.setSelected(true);
 
         JRadioButton fichaBlanca = new JRadioButton( "Blanca" );
         fichaBlanca.setMnemonic(KeyEvent.VK_B );
-        fichaBlanca.setActionCommand( "FICHA_BLANCA" );
+        fichaBlanca.setActionCommand( ConstanteOthello.FICHA_BLANCA );
 
-        ButtonGroup group = new ButtonGroup();
-        group.add( fichaNegra      );
-        group.add( fichaBlanca     );        
+        this.eleccionFichaJugadorUno = new ButtonGroup();
+        this.eleccionFichaJugadorUno.add( fichaNegra      );
+        this.eleccionFichaJugadorUno.add( fichaBlanca     );
 
         panel.add( new JLabel( "Ficha para Jugador (1) " ) );
         panel.add( new JSeparator() );
@@ -317,7 +364,7 @@ public class OthelloGUI extends JFrame{
     }
 
 
-    public JComponent obtenerOpcionesVarios(){
+    private JComponent obtenerOpcionesVarios(){
     // ----------------------------------------------------------------------
 
         JPanel panel;
@@ -328,8 +375,10 @@ public class OthelloGUI extends JFrame{
         panel.setSize( 150, 10 );
         //panel.setLayout( new BoxLayout( panel, BoxLayout.X_AXIS ) );
 
-        panel.add( new JLabel( "Profundidad" ) );
-        panel.add(new JTextField( "3" , 15));
+        this.eleccionProfundidad = new JTextField( "3", 15 );
+
+        panel.add(  new JLabel( "Profundidad" ) );
+        panel.add(  this.eleccionProfundidad    );
 
         return( panel );
     }
@@ -341,5 +390,9 @@ public class OthelloGUI extends JFrame{
         panel.setLayout(new GridLayout(1, 1));
         panel.add(filler);
         return panel;
+    }
+
+    public void pararJuego(){
+        this.elJuego.pararJuego();
     }
 }
