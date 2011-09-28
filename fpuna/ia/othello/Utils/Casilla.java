@@ -46,6 +46,7 @@ public class Casilla{
 
 
     public void deshabilitar(){
+        this.colorFicha         = Casilla.FICHA_TRANSPARENTE;
         this.blancoHabilitado   = false;
         this.negroHabilitado    = false;
     }
@@ -136,9 +137,9 @@ public class Casilla{
      *
      * @autor gusamasan
      */
-    public void asignarFichaBlanca(){
-        this.colorFicha = Casilla.FICHA_BLANCA;
+    public void asignarFichaBlanca(){        
         this.deshabilitar();
+        this.colorFicha = Casilla.FICHA_BLANCA;
     }
 
     /**
@@ -146,9 +147,9 @@ public class Casilla{
      *
      * @autor gusamasan
      */
-    public void asignarFichaNegra(){
+    public void asignarFichaNegra(){        
+        this.deshabilitar();
         this.colorFicha = Casilla.FICHA_NEGRA;
-        this.deshabilitar();   
     }
 
 

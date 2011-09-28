@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
-import fpuna.ia.othello.GUI;
+import fpuna.ia.othello.gui.accion.AccionJugadaHumano;
 import fpuna.ia.othello.Utils.Tablero;
 
 /**
@@ -22,6 +22,8 @@ import fpuna.ia.othello.Utils.Tablero;
 public class TableroGUI extends JPanel{
 // ------------------------------------------------------------------------
 
+    private OthelloGUI  othelloGUI;
+    
     private int cantidadColumnas    ,
                 cantidadFilas;
 
@@ -39,9 +41,10 @@ public class TableroGUI extends JPanel{
 // ------------------------------------------------------------------------
 
     /** Constructores *****************************************************/
-    public TableroGUI(){
+    public TableroGUI( OthelloGUI othello ){
         super();
 
+        this.othelloGUI = othello;
         //this.
         //java.awt.Dimension tamanio;
 
@@ -83,7 +86,7 @@ public class TableroGUI extends JPanel{
 
         this.colocarPrimerasFichas();
         
-        agregarManejadorDeClick();
+        //agregarManejadorDeClick();
     }
 
     public Tablero getTablero(){
@@ -168,7 +171,8 @@ public class TableroGUI extends JPanel{
             this.add( new JLabel( "" + ( fila + 1 ), JLabel.RIGHT ) );
             for( columna= 0; columna < this.cantidadColumnas; columna++ ){
                 
-                    unEscaque   = new Escaque();
+                    unEscaque   = new Escaque( fila, columna );
+                    unEscaque.addActionListener( new AccionJugadaHumano( this.othelloGUI ) );
                     //unEscaque.setBackground( new java.awt.Color( 255, 255, 255 ) );
                     this.contenedorEscaques[ fila ][ columna ] = unEscaque;                    
                     this.add( unEscaque );

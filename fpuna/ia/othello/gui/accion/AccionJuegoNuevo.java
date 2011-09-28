@@ -51,6 +51,7 @@ public class AccionJuegoNuevo implements ActionListener{
             this.elTablero.getTablero().restarurarTablero();            
             this.elTablero.refrescarTablerGUI();
             this.elTablero.deshabilitarTablero();
+
             botonLlamador.setText( "jugar" );            
         }
     }

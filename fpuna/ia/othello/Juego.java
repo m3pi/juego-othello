@@ -38,7 +38,7 @@ public class Juego extends Thread{
 
     public static void esperarUnRato(){
         try{
-            Thread.sleep( 500 );
+            Thread.sleep( 10 );
         }
         catch( Exception e ){
             e.printStackTrace();
@@ -69,6 +69,9 @@ public class Juego extends Thread{
         this.jugadorDeTurno = jugadorDeTurno;
     }
 
+    public boolean estaParado(){
+        return( this.pararJuego );
+    }
 
 
     @Override
@@ -91,10 +94,25 @@ public class Juego extends Thread{
 
         while( !pararJuego ){
 
+            /**/
+            System.out.println( "********************************" );
+
+            nuevoTablero = jugadorDeTurno.getTablero();
+            nuevoTablero.imprimirTablero();
+
+            System.out.println( "*********************************" );
+
             nuevoTablero = this.jugadorDeTurno.jugar(turno);
 
+            System.out.println( "##################################" );
 
-            if( nuevoTablero != null ){
+            nuevoTablero.imprimirTablero();
+            
+            System.out.println( "##################################" );
+            /**/
+            
+
+            if( !pararJuego && nuevoTablero != null ){
                 this.intefazGUI.setTablero( nuevoTablero );
                 this.intefazGUI.refrescarTablero();
 
@@ -115,6 +133,8 @@ public class Juego extends Thread{
 
                     this.tableroFichaBlanca = nuevoTablero;
                 }
+
+                this.jugadorDeTurno.setTablero( nuevoTablero );
            }
            else{ // pasa de turno
 
@@ -129,7 +149,7 @@ public class Juego extends Thread{
 
                 
                 if( this.tableroFichaNegra == null && this.tableroFichaBlanca == null ) // ningún jugador puede seguir
-                    break;                                
+                    pararJuego = true;
            }
 
            this.intefazGUI.limpiarAvisoPasoTurno();

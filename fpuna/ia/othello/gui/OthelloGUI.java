@@ -128,14 +128,14 @@ public class OthelloGUI extends JFrame implements GUI{
                                             this.obtenerEleccionAlgoritmo()     ,
                                             Integer.parseInt(
                                                         this.obtenerEleccionProfundidad()
-                                                        ));
+                                                        ), this.elJuego );
 
         jugadorDos  = FabricaAbstractaJugador
                         .obtenerJugador(    this.obtenerEleccionJugadorDos()    ,
                                             this.obtenerEleccionAlgoritmo()     ,
                                             Integer.parseInt(
                                                         this.obtenerEleccionProfundidad()
-                                                        ));
+                                                        ), this.elJuego );
 
         jugadorUno.setTablero( this.elTableroGUI.getTablero() );
         jugadorDos.setTablero( this.elTableroGUI.getTablero() );
@@ -143,10 +143,17 @@ public class OthelloGUI extends JFrame implements GUI{
         if( this.eleccionFichaJugadorUno.getSelection()
                 .getActionCommand()
                 .equals( ConstanteOthello.FICHA_NEGRA )){
+
+            jugadorUno.setColorFichaAsignada( ConstanteOthello.FICHA_NEGRA );
+            jugadorDos.setColorFichaAsignada( ConstanteOthello.FICHA_BLANCA);
+
             this.elJuego.setJugadorDeTurno(         jugadorUno );
             this.elJuego.setJugadorConFichaNegra(   jugadorUno );
             this.elJuego.setJugadorConFichaBlanca(  jugadorDos );
         }else{            
+
+            jugadorUno.setColorFichaAsignada( ConstanteOthello.FICHA_BLANCA );
+            jugadorDos.setColorFichaAsignada( ConstanteOthello.FICHA_NEGRA  );
 
             this.elJuego.setJugadorDeTurno(         jugadorDos );
             this.elJuego.setJugadorConFichaNegra(   jugadorDos );
@@ -179,6 +186,10 @@ public class OthelloGUI extends JFrame implements GUI{
         return( this.eleccionProfundidad.getText().trim() );
     }
 
+    public Juego obtenerJuego(){
+        return( this.elJuego );
+    }
+    
     private JTabbedPane obtenerPestanias(){
     // ----------------------------------------------------------------------        
 
@@ -200,7 +211,7 @@ public class OthelloGUI extends JFrame implements GUI{
         
         //panelJuego.setLayout(new BoxLayout( panelJuego, BoxLayout.LINE_AXIS ));
 
-        this.elTableroGUI      = new TableroGUI();
+        this.elTableroGUI      = new TableroGUI( this );
         
         panelTablero.setLayout(new BoxLayout( panelTablero, BoxLayout.PAGE_AXIS));
         //panelJuego.setLayout( new GridLayout( 3, 1 ) );
@@ -485,10 +496,12 @@ public class OthelloGUI extends JFrame implements GUI{
 
     public void pararJuego(){
         this.elJuego.pararJuego();
+        this.elJuego.getJugadorConFichaNegra().getTablero().restarurarTablero();
+        
     }
 
     public void refrescarTablero(){
-        this.elTableroGUI.getTablero().restarurarTablero();
+        this.elTableroGUI.refrescarTablerGUI();
     }
 
     public Tablero getTablero(){
