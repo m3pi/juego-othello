@@ -7,6 +7,7 @@ package fpuna.ia.othello.Utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -276,15 +277,15 @@ public class Tablero {
    }
 
 
-     public boolean  GameOver()
+     public boolean  EsFinalDeJuego()
     {
-        if (CanPlay(Casilla.FICHA_NEGRA) || CanPlay(Casilla.FICHA_BLANCA))
+        if (PuedeJugar(Casilla.FICHA_NEGRA) || PuedeJugar(Casilla.FICHA_BLANCA))
             return false;
         else
             return true;
     }
 
-    public boolean  CanPlay(int player)
+    public boolean  PuedeJugar(int player)
       {
         int x;
         int y;
@@ -299,12 +300,117 @@ public class Tablero {
                  if (Casilla.FICHA_NEGRA==player) {
                     cas.asignarFichaNegra();
                  }
-                if (ponerFicha(cas))
+                if (movLegal(cas))
                     return true;
             }
         }
 
         return false;
       }
+      public boolean movLegal(Casilla c) {
+   	      int incFila, incCol;
 
+              //comprobar que la casilla esté vacía
+              if (!matrizTablero[c.fila][c.col].estaVacia())
+                 return false;
+
+                  //recorrer las 8 direcciones posibles
+                  for (incFila=-1; incFila<=1; incFila++)
+                     for (incCol=-1; incCol<=1; incCol++)
+                        if ((incCol!=0)||(incFila!=0)) {
+                           //buscar un pivote en esa dirección
+                           if (buscarPivote( c, incFila, incCol, c.obtenerColorFicha())!=null)
+                              return true;
+                        }
+              return false;
+      }
+
+
+    public ArrayList<Casilla> generarMovimiento(int jugador)
+    {
+        ArrayList<Casilla> movimientos = new ArrayList<Casilla>();
+
+        for (int x = 0; x < CANTIDAD_FILAS_DEFECTO; x++)
+        {
+            for (int y = 0; y < CANTIDAD_COLUMNAS_DEFECTO; y++)
+            {
+                int value = valorMovimiento(this.matrizTablero[x][y], jugador);
+                if (value > 0)
+                    movimientos.add(new Casilla(x, y));
+            }
+        }
+        return movimientos;
+    }
+
+    public int valorMovimiento(Casilla cas, int jugador)
+        {
+            //If the space is occupied, return 0
+            if (cas.obtenerColorFicha() != Casilla.FICHA_TRANSPARENTE)
+                return 0;
+
+            int value = 0;
+            int xDireccion; //direccion Horizontal
+            int yDireccion; //direccion Vertical
+            int distancia; //distancia
+            int xTemp;
+            int yTemp;
+
+            for (xDireccion = -1; xDireccion <= 1; xDireccion++)
+            {
+                for (yDireccion = -1; yDireccion <= 1; yDireccion++)
+                {
+                    if (!(xDireccion == 0 && yDireccion == 0))
+                    {
+                        distancia = 1;
+                        xTemp = cas.fila + xDireccion;
+                        yTemp = cas.col + yDireccion;
+                        while (espacioValido(xTemp, yTemp) && matrizTablero[xTemp][yTemp].obtenerColorFicha() == -jugador)
+                        {
+                            distancia++;
+                            xTemp += xDireccion;
+                            yTemp += yDireccion;
+                        }
+                        if (distancia > 1 && espacioValido(xTemp, yTemp) && matrizTablero[xTemp][yTemp].obtenerColorFicha() == jugador)
+                            value += distancia - 1;
+                    }
+                }
+            }
+
+            return value;
+        }
+
+     public boolean  espacioValido(int fila, int col)
+    {
+        if (fila < 0 || col < 0 || fila >= CANTIDAD_FILAS_DEFECTO || col >= CANTIDAD_COLUMNAS_DEFECTO)
+            return false;
+        else
+            return true;
+    }
+     public void imprimirTablero()
+     {
+         System.out.println();
+         for (int x = 0 ; x < CANTIDAD_FILAS_DEFECTO ; x ++ )
+         {
+             for (int y = 0 ; y < CANTIDAD_COLUMNAS_DEFECTO ; y ++ )
+             {
+                 System.out.print(matrizTablero[x][y].obtenerColorFicha() + " ");
+             }
+             System.out.println();
+         }
+     }
+
+     public Tablero copiarTablero()
+     {
+         Tablero nuevoTablero=new Tablero();
+         Casilla[][] nuevaCasillas= new Casilla[CANTIDAD_FILAS_DEFECTO][CANTIDAD_COLUMNAS_DEFECTO];
+         for(int  fila =0; fila < this.CANTIDAD_FILAS_DEFECTO; fila++ ){
+
+            for(int  columna =0; columna < this.CANTIDAD_COLUMNAS_DEFECTO; columna++ ){
+                nuevaCasillas[fila][columna]= (matrizTablero[fila][columna]).copiarCasilla();
+
+            }
+         }
+         nuevoTablero.setMatrizTablero(nuevaCasillas);
+         return nuevoTablero;
+     }
 }
