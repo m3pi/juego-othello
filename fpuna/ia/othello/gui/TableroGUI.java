@@ -19,7 +19,7 @@ import fpuna.ia.othello.Utils.Tablero;
  *
  * @author gusamasan
  */
-public class TableroGUI extends JPanel implements GUI{
+public class TableroGUI extends JPanel{
 // ------------------------------------------------------------------------
 
     private int cantidadColumnas    ,
@@ -41,6 +41,13 @@ public class TableroGUI extends JPanel implements GUI{
     /** Constructores *****************************************************/
     public TableroGUI(){
         super();
+
+        //this.
+        //java.awt.Dimension tamanio;
+
+        //tamanio = new java.awt.Dimension( 500, 600 );
+        
+        //this.setPreferredSize( tamanio );
 
         turno = HUMANO;
 
