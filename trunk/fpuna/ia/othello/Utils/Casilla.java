@@ -197,5 +197,16 @@ public class Casilla{
             this.colorFicha = Casilla.FICHA_BLANCA;
     }
 
+    public Casilla copiarCasilla() {
+        Casilla casillanueva=new Casilla(this.fila, this.col);
+        if(obtenerColorFicha() == FICHA_BLANCA)
+            casillanueva.asignarFichaBlanca();
+        else if(obtenerColorFicha() == FICHA_NEGRA)
+            casillanueva.asignarFichaNegra();
+
+        return casillanueva;
+
+    }
+
    
 }
