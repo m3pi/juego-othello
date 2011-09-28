@@ -3,6 +3,7 @@
 
 package fpuna.ia.othello.algoritmo;
 
+import fpuna.ia.othello.Utils.Casilla;
 import fpuna.ia.othello.Utils.Tablero;
 
 /**
@@ -12,6 +13,8 @@ import fpuna.ia.othello.Utils.Tablero;
 public class AlgoritmoHumano extends Algoritmo{
 // ----------------------------------------------------------------------
 
+    private Casilla casillaJugada;
+    
 // ----------------------------------------------------------------------
 
     /** Constructores **************************************************/
@@ -21,17 +24,15 @@ public class AlgoritmoHumano extends Algoritmo{
     /*******************************************************************/
     
 
+    public void asignarCasillaJuagada( Casilla casilla ){
+        this.casillaJugada = casilla;
+    }
+
     public Tablero obtenerNuevaConfiguracionTablero( Tablero tablero, short turno ){
 
         System.out.println( "analizando siguiente jugada con HUMANO" );
 
-        try{
-            Thread.sleep( 1000 );
-
-        }
-        catch( Exception e ){
-            e.printStackTrace();
-        }
+        tablero.ponerFicha( this.casillaJugada );
 
         return( tablero );
     }

@@ -3,6 +3,7 @@
 
 package fpuna.ia.othello.jugador;
 
+import fpuna.ia.othello.Juego;
 import fpuna.ia.othello.algoritmo.*;
 import fpuna.ia.othello.ConstanteOthello;
 import fpuna.ia.othello.algoritmo.FabricaAbstractaAlgoritmo;
@@ -13,7 +14,7 @@ import fpuna.ia.othello.algoritmo.FabricaAbstractaAlgoritmo;
  */
 public class FabricaAbstractaJugador {
 
-    public static Jugador obtenerJugador( String tipoJugador, String eleccionAlgoritmo, int profundidad ){
+    public static Jugador obtenerJugador( String tipoJugador, String eleccionAlgoritmo, int profundidad, Juego elJuego ){
     // --------------------------------------------------------------------------------
 
         Algoritmo   algoritmo;
@@ -35,6 +36,8 @@ public class FabricaAbstractaJugador {
             jugador.setAlgoritmo( algoritmo );
         }        
 
+        jugador.setJuego( elJuego );
+        
         return( jugador );
     }
 }

@@ -20,6 +20,10 @@ public class JugadorMaquina extends Jugador{
     }
     /**************************************************************************/
 
+    public boolean esHumano(){
+        return( false );
+    }
+    
     public Tablero jugar(short turno){
 
         return( this.algoritmo
