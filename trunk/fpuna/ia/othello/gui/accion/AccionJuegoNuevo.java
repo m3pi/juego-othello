@@ -40,12 +40,14 @@ public class AccionJuegoNuevo implements ActionListener{
 
         if( botonLlamador.getText().equals( "jugar" ) ){
             this.othello.cargarConfiguracion();
+            this.othello.habilitarAvisos();
             botonLlamador.setText( "juego nuevo" );
             this.elTablero.habilitarTablero();
             this.othello.jugar();
         }
         else{
             this.othello.pararJuego();
+            this.othello.deshabilitarAvisos();
             this.elTablero.getTablero().restarurarTablero();            
             this.elTablero.refrescarTablerGUI();
             this.elTablero.deshabilitarTablero();

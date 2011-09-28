@@ -14,9 +14,19 @@ import fpuna.ia.othello.Utils.Tablero;
  */
 public interface GUI {
 
+    public void avisarTurnoFichaBlanca();
+
+    public void avisarTurnoFichaNegra();
+
+    public void avisarPasoTurnoFichaBlanca();
+
+    public void avisarPasoTurnoFichaNegra();
+    
     public Tablero getTablero();
 
     public void setTablero( Tablero tablero );
+
+    public void limpiarAvisoPasoTurno();
 
     public void refrescarTablero();
 }

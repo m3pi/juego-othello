@@ -14,18 +14,22 @@ import fpuna.ia.othello.gui.accion.AccionJuegoNuevo;
 import fpuna.ia.othello.gui.accion.AccionConfiguracionLista;
 import fpuna.ia.othello.jugador.*;
 
+import fpuna.ia.othello.GUI;
 import fpuna.ia.othello.Juego;
-
+import fpuna.ia.othello.Utils.Tablero;
 /**
  *
  * @author gusamasan
  */
-public class OthelloGUI extends JFrame{
+public class OthelloGUI extends JFrame implements GUI{
 // ----------------------------------------------------------------------
 
     private short   turno;
 
     private boolean pararJuego;
+
+    private Escaque senialTurno ,
+                    senialPasoTurno;
 
     private TableroGUI elTableroGUI;
 
@@ -49,10 +53,39 @@ public class OthelloGUI extends JFrame{
         this.inicializar();
     }
     /********************************************************************/
-   
+
+    public void avisarTurnoFichaBlanca(){
+        this.senialTurno.mostrarFichaBlanca();
+    }
+
+    public void avisarTurnoFichaNegra(){
+        this.senialTurno.mostrarFichaNegra();
+    }
+
+    public void avisarPasoTurnoFichaBlanca(){
+        this.senialPasoTurno.mostrarFichaBlanca();
+    }
+
+    public void avisarPasoTurnoFichaNegra(){
+        this.senialPasoTurno.mostrarFichaNegra();
+    }
+
+    public void deshabilitarAvisos(){
+        this.senialTurno.setEnabled( false );
+        this.senialPasoTurno.setEnabled( false );
+        this.senialPasoTurno.limpiar();
+    }
+
     public void jugar(){
 
         this.elJuego.start();
+    }
+
+    public void habilitarAvisos(){
+        this.senialTurno.mostrarFichaNegra();
+        this.limpiarAvisoPasoTurno();
+        this.senialTurno.setEnabled( true );
+        this.senialPasoTurno.setEnabled( true );
     }
 
     private void inicializar(){
@@ -67,8 +100,9 @@ public class OthelloGUI extends JFrame{
         //this.setSize( 100, 100 );
         java.awt.Dimension tamanio;
 
-        tamanio = new java.awt.Dimension( 650, 750 );
-        this.setPreferredSize( tamanio );
+        tamanio = new java.awt.Dimension( 1020, 750 );
+        //this.setPreferredSize( tamanio );
+        this.setMaximumSize( tamanio );
         //this.setSize( 350, 350 );
         
         this.add( this.obtenerPestanias() );
@@ -87,7 +121,7 @@ public class OthelloGUI extends JFrame{
 
     // ------------------------------------------------------------------------
 
-        this.elJuego    = new Juego( this.elTableroGUI );
+        this.elJuego    = new Juego( this );
 
         jugadorUno  = FabricaAbstractaJugador
                         .obtenerJugador(    this.obtenerEleccionJugadorUno()    ,
@@ -121,6 +155,10 @@ public class OthelloGUI extends JFrame{
         
     }
 
+    public void limpiarAvisoPasoTurno(){
+        this.senialPasoTurno.limpiar();
+    }
+
     public String obtenerEleccionAlgoritmo(){
         return( this.eleccionAlgoritmo.getSelection().getActionCommand() );
     }
@@ -144,27 +182,43 @@ public class OthelloGUI extends JFrame{
     private JTabbedPane obtenerPestanias(){
     // ----------------------------------------------------------------------        
 
-        JComponent panelJuego;
-        JComponent panelConfiguracion;
+        //JComponent panelJuego;
+        JComponent panelTablero;
+        JSeparator separador;
 
     // ----------------------------------------------------------------------
 
+        separador  = new JSeparator();
+        separador.setOrientation( JSeparator.VERTICAL );
+        
         pestanias           = new JTabbedPane();        
 
-        panelJuego          = new JPanel();
+        //panelJuego          = new JPanel();
+        panelTablero        = new JPanel();
+        
+
+        
+        //panelJuego.setLayout(new BoxLayout( panelJuego, BoxLayout.LINE_AXIS ));
+
         this.elTableroGUI      = new TableroGUI();
         
-        panelJuego.setLayout(new BoxLayout( panelJuego, BoxLayout.PAGE_AXIS));
+        panelTablero.setLayout(new BoxLayout( panelTablero, BoxLayout.PAGE_AXIS));
         //panelJuego.setLayout( new GridLayout( 3, 1 ) );
-        panelJuego.add( this.elTableroGUI );
-        panelJuego.add( new JSeparator() );
-        panelJuego.add( this.obtenerBotonNuevoJuevo() );
-        
+        panelTablero.add( this.elTableroGUI );
+        panelTablero.add( new JSeparator() );
+        panelTablero.add( this.obtenerBotonNuevoJuevo() );
+
+        JSplitPane panelJuego = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                           panelTablero, this.obtenerPanelMensaje() );
+
+        //panelJuego.add( panelTablero    );
+        //panelJuego.add( separador );
+        //panelJuego.add( this.obtenerPanelMensaje()    );
+
         pestanias.addTab("Juego", null, panelJuego ,"Does nothing");
 
         pestanias.setMnemonicAt(0, KeyEvent.VK_1);
-
-        panelConfiguracion = makeTextPanel("Configuración");
+        
         pestanias.addTab("Configuración", null, this.obtenerPanelConfiguracion(),
                           "Definición de los parámetros del juego");
         pestanias.setMnemonicAt(1, KeyEvent.VK_2);        
@@ -220,7 +274,44 @@ public class OthelloGUI extends JFrame{
         return( panel );
     }
 
+    private JPanel obtenerPanelMensaje(){
+    // ----------------------------------------------------------------------
 
+        JPanel  panelMensaje, panelTurno, panelPaso, panelPrincipal;        
+
+    // ----------------------------------------------------------------------
+
+        this.senialTurno         = new Escaque();
+        this.senialPasoTurno     = new Escaque();
+        
+        this.senialTurno.mostrarFichaNegra();
+        this.senialTurno.setEnabled( false );
+        this.senialPasoTurno.setEnabled( false );
+        //escaquePaso.
+
+        panelMensaje    = new JPanel();
+        panelTurno      = new JPanel();
+        panelPaso       = new JPanel();
+        panelPrincipal  = new JPanel();
+        
+        //panelMensaje.setLayout( new BoxLayout( panelMensaje, BoxLayout.Y_AXIS ) );
+        //panelTurno.setLayout( new BoxLayout( panelTurno, BoxLayout.X_AXIS ) );
+        panelMensaje.setLayout( new GridLayout( 4, 1 ) );
+        panelTurno.setLayout( new GridLayout( 2, 2 ) );        
+        panelPaso.setLayout( new BoxLayout( panelPaso, BoxLayout.X_AXIS ) );
+                
+        panelTurno.add( new JLabel( "JUEGA" ) );
+        panelTurno.add( this.senialTurno );
+        panelTurno.add( new JLabel( "PASA TURNO" ) );        
+        panelTurno.add( this.senialPasoTurno );
+
+        panelMensaje.add( panelTurno );
+        panelMensaje.add( panelPaso );
+
+        panelPrincipal.add( panelMensaje );
+        
+        return( panelPrincipal );
+    }
     private JButton obtenerBotonConfiguracionLista(){
     // ------------------------------------------------------------------------
 
@@ -394,5 +485,17 @@ public class OthelloGUI extends JFrame{
 
     public void pararJuego(){
         this.elJuego.pararJuego();
+    }
+
+    public void refrescarTablero(){
+        this.elTableroGUI.getTablero().restarurarTablero();
+    }
+
+    public Tablero getTablero(){
+        return( this.elTableroGUI.getTablero() );
+    }
+
+    public void setTablero( Tablero tablero ){
+        this.elTableroGUI.setTablero(tablero);
     }
 }

@@ -25,11 +25,24 @@ public class Juego extends Thread{
                     jugadorConFichaNegra    ,
                     jugadorDeTurno;
 
+    private Tablero tableroFichaBlanca, tableroFichaNegra;
+
 // ----------------------------------------------------------------------------
 
+    /** Constructores ********************************************************/
     public Juego( GUI gui ){
         this.intefazGUI = gui;
         this.pararJuego = false;
+    }
+    /*************************************************************************/
+
+    public static void esperarUnRato(){
+        try{
+            Thread.sleep( 500 );
+        }
+        catch( Exception e ){
+            e.printStackTrace();
+        }
     }
 
     public Jugador getJugadorConFichaBlanca() {
@@ -83,20 +96,47 @@ public class Juego extends Thread{
 
             nuevoTablero = this.jugadorDeTurno.jugar();
 
-            this.intefazGUI.setTablero( nuevoTablero );
-            this.intefazGUI.refrescarTablero();
-            
-            if( turno == ConstanteOthello.TURNO_FICHA_NEGRA ){
+            if( nuevoTablero != null ){
+                this.intefazGUI.setTablero( nuevoTablero );
+                this.intefazGUI.refrescarTablero();
 
-                this.jugadorDeTurno = this.jugadorConFichaBlanca;
+                if( turno == ConstanteOthello.TURNO_FICHA_NEGRA ){
 
-                turno = ConstanteOthello.TURNO_FICHA_BLANCA;
-            }
-            else{
-                this.jugadorDeTurno = this.jugadorConFichaNegra;
+                    this.jugadorDeTurno = this.jugadorConFichaBlanca;
+                    this.intefazGUI.avisarTurnoFichaBlanca();
 
-                turno = ConstanteOthello.TURNO_FICHA_NEGRA;
-            }
+                    turno = ConstanteOthello.TURNO_FICHA_BLANCA;
+
+                    this.tableroFichaNegra = nuevoTablero;
+                }
+                else{
+                    this.jugadorDeTurno = this.jugadorConFichaNegra;
+                    this.intefazGUI.avisarTurnoFichaNegra();
+
+                    turno = ConstanteOthello.TURNO_FICHA_NEGRA;
+
+                    this.tableroFichaBlanca = nuevoTablero;
+                }
+           }
+           else{ // pasa de turno
+
+                if( turno == ConstanteOthello.TURNO_FICHA_NEGRA ){
+                    this.tableroFichaNegra = null;
+                    this.intefazGUI.avisarPasoTurnoFichaNegra();
+                }
+                else{
+                    this.tableroFichaBlanca= null;
+                    this.intefazGUI.avisarPasoTurnoFichaBlanca();
+                }
+
+                
+                if( this.tableroFichaNegra == null && this.tableroFichaBlanca == null ) // ningún jugador puede seguir
+                    break;                                
+           }
+
+           this.intefazGUI.limpiarAvisoPasoTurno();
+           this.esperarUnRato();
+
         }
     }
 
