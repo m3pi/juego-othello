@@ -29,5 +29,11 @@ public abstract class Algoritmo {
         this.profundidad = pProfundidad;
     }
 
-    public abstract Tablero obtenerNuevaConfiguracionTablero( Tablero tablero );
+    public abstract Tablero obtenerNuevaConfiguracionTablero( Tablero tablero,short turno );
+
+
+
+
+
+    
 }

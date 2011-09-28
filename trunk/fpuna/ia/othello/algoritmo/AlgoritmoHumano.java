@@ -21,12 +21,13 @@ public class AlgoritmoHumano extends Algoritmo{
     /*******************************************************************/
     
 
-    public Tablero obtenerNuevaConfiguracionTablero( Tablero tablero ){
+    public Tablero obtenerNuevaConfiguracionTablero( Tablero tablero, short turno ){
 
         System.out.println( "analizando siguiente jugada con HUMANO" );
 
         try{
             Thread.sleep( 1000 );
+
         }
         catch( Exception e ){
             e.printStackTrace();
