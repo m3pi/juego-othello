@@ -73,9 +73,7 @@ public class Juego extends Thread{
 
     @Override
     public void run(){
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
+    
 
         jugar();
         
@@ -88,13 +86,13 @@ public class Juego extends Thread{
 
     // ------------------------------------------------------------------------
 
-
         this.pararJuego = false;
         this.turno      = ConstanteOthello.TURNO_FICHA_NEGRA;
 
         while( !pararJuego ){
 
-            nuevoTablero = this.jugadorDeTurno.jugar();
+            nuevoTablero = this.jugadorDeTurno.jugar(turno);
+
 
             if( nuevoTablero != null ){
                 this.intefazGUI.setTablero( nuevoTablero );
