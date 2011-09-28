@@ -43,5 +43,7 @@ public abstract class Jugador{
         this.tablero = tablero;
     }
 
-    public abstract Tablero jugar();
+    public abstract Tablero jugar(short turno);
+
+    
 }
