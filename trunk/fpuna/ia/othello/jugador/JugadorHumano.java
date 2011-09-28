@@ -21,9 +21,9 @@ public class JugadorHumano extends Jugador{
     /**************************************************************************/    
 
 
-    public Tablero jugar(){
+    public Tablero jugar(short turno){
         return( this.algoritmo
-                    .obtenerNuevaConfiguracionTablero( this.tablero )
+                    .obtenerNuevaConfiguracionTablero( this.tablero,turno  )
               );
     }
 }
