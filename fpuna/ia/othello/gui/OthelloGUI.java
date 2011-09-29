@@ -491,16 +491,17 @@ public class OthelloGUI extends JFrame implements GUI{
 
         panel   = new JPanel();
         panel.setSize( 150, 10 );
-        //panel.setLayout( new BoxLayout( panel, BoxLayout.X_AXIS ) );
+        panel.setLayout( new BoxLayout( panel, BoxLayout.X_AXIS ) );
 
         this.eleccionProfundidadAlgoritmo1 = new JTextField( "3", 5 );
         this.eleccionProfundidadAlgoritmo2 = new JTextField( "3", 5 );
 
         panel.add(  new JLabel( "Profundidad (Jugador 1)" ) );
         panel.add(  this.eleccionProfundidadAlgoritmo1    );
-
+        panel.add( new JLabel( "                           " ) );
         panel.add(  new JLabel( "Profundidad (Jugador 2)" ) );
         panel.add(  this.eleccionProfundidadAlgoritmo2    );
+        panel.add( new JLabel( "                           " ) );
 
         return( panel );
     }
