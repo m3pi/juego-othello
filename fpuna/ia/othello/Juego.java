@@ -38,7 +38,7 @@ public class Juego extends Thread{
 
     public static void esperarUnRato(){
         try{
-            Thread.sleep( 10 );
+            Thread.sleep( 1000 );
         }
         catch( Exception e ){
             e.printStackTrace();
@@ -106,7 +106,8 @@ public class Juego extends Thread{
 
             System.out.println( "##################################" );
 
-            nuevoTablero.imprimirTablero();
+            if( nuevoTablero != null )
+                nuevoTablero.imprimirTablero();
             
             System.out.println( "##################################" );
             /**/
@@ -140,10 +141,16 @@ public class Juego extends Thread{
 
                 if( turno == ConstanteOthello.TURNO_FICHA_NEGRA ){
                     this.tableroFichaNegra = null;
+                    this.jugadorDeTurno = this.jugadorConFichaBlanca;
+                    this.intefazGUI.avisarTurnoFichaBlanca();
+                    turno = ConstanteOthello.TURNO_FICHA_BLANCA;
                     this.intefazGUI.avisarPasoTurnoFichaNegra();
                 }
                 else{
                     this.tableroFichaBlanca= null;
+                    this.jugadorDeTurno = this.jugadorConFichaNegra;
+                    this.intefazGUI.avisarTurnoFichaNegra();
+                    turno = ConstanteOthello.TURNO_FICHA_NEGRA;
                     this.intefazGUI.avisarPasoTurnoFichaBlanca();
                 }
 
@@ -151,9 +158,9 @@ public class Juego extends Thread{
                 if( this.tableroFichaNegra == null && this.tableroFichaBlanca == null ) // ningún jugador puede seguir
                     pararJuego = true;
            }
-
-           this.intefazGUI.limpiarAvisoPasoTurno();
+           
            this.esperarUnRato();
+           this.intefazGUI.limpiarAvisoPasoTurno();
 
         }
     }

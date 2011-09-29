@@ -3,7 +3,7 @@
 
 package fpuna.ia.othello.gui.accion;
 
-import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -47,6 +47,7 @@ public class AccionJugadaHumano implements ActionListener{
 
         if( elJuego.getJugadorDeTurno().esHumano() ){
 
+            //JOptionPane.showMessageDialog(othelloGUI, "Prueba" );
             escaqueJugado   = (Escaque)evento.getSource();
 
             casillaJugada   = new Casilla( escaqueJugado.getFila(), escaqueJugado.getColumna() );
