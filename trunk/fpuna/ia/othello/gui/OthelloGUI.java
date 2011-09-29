@@ -37,12 +37,14 @@ public class OthelloGUI extends JFrame implements GUI{
 
     private Juego   elJuego;
 
-    private ButtonGroup eleccionAlgoritmo       ,
-                        eleccionFichaJugadorUno ,
-                        eleccionJugadorUno      ,
+    private ButtonGroup eleccionAlgoritmoJugador1   ,
+                        eleccionAlgoritmoJugador2   ,
+                        eleccionFichaJugadorUno     ,
+                        eleccionJugadorUno          ,
                         eleccionJugadorDos;
 
-    private JTextField  eleccionProfundidad;
+    private JTextField  eleccionProfundidadAlgoritmo1,
+                        eleccionProfundidadAlgoritmo2;
     
 // ----------------------------------------------------------------------
 
@@ -124,17 +126,17 @@ public class OthelloGUI extends JFrame implements GUI{
         this.elJuego    = new Juego( this );
 
         jugadorUno  = FabricaAbstractaJugador
-                        .obtenerJugador(    this.obtenerEleccionJugadorUno()    ,
-                                            this.obtenerEleccionAlgoritmo()     ,
+                        .obtenerJugador(    this.obtenerEleccionJugadorUno()                ,
+                                            this.obtenerEleccionAlgoritmoJugadorUno()       ,
                                             Integer.parseInt(
-                                                        this.obtenerEleccionProfundidad()
+                                                        this.obtenerEleccionProfundidadAlgoritmoUno()
                                                         ), this.elJuego );
 
         jugadorDos  = FabricaAbstractaJugador
-                        .obtenerJugador(    this.obtenerEleccionJugadorDos()    ,
-                                            this.obtenerEleccionAlgoritmo()     ,
+                        .obtenerJugador(    this.obtenerEleccionJugadorDos()              ,
+                                            this.obtenerEleccionAlgoritmoJugadorDos()     ,
                                             Integer.parseInt(
-                                                        this.obtenerEleccionProfundidad()
+                                                        this.obtenerEleccionProfundidadAlgoritmoDos()
                                                         ), this.elJuego );
 
         jugadorUno.setTablero( this.elTableroGUI.getTablero() );
@@ -166,8 +168,12 @@ public class OthelloGUI extends JFrame implements GUI{
         this.senialPasoTurno.limpiar();
     }
 
-    public String obtenerEleccionAlgoritmo(){
-        return( this.eleccionAlgoritmo.getSelection().getActionCommand() );
+    public String obtenerEleccionAlgoritmoJugadorUno(){
+        return( this.eleccionAlgoritmoJugador1.getSelection().getActionCommand() );
+    }
+
+    public String obtenerEleccionAlgoritmoJugadorDos(){
+        return( this.eleccionAlgoritmoJugador2.getSelection().getActionCommand() );
     }
 
     public String obtenerEleccionFichaJugadorUno(){        
@@ -182,8 +188,12 @@ public class OthelloGUI extends JFrame implements GUI{
         return( this.eleccionJugadorUno.getSelection().getActionCommand() );
     }
 
-    public String obtenerEleccionProfundidad(){
-        return( this.eleccionProfundidad.getText().trim() );
+    public String obtenerEleccionProfundidadAlgoritmoUno(){
+        return( this.eleccionProfundidadAlgoritmo1.getText().trim() );
+    }
+
+    public String obtenerEleccionProfundidadAlgoritmoDos(){
+        return( this.eleccionProfundidadAlgoritmo2.getText().trim() );
     }
 
     public Juego obtenerJuego(){
@@ -250,13 +260,18 @@ public class OthelloGUI extends JFrame implements GUI{
         //panel.setLayout( new GridLayout( 4, 2 ) );
 
 
-        this.eleccionJugadorUno     = new ButtonGroup();
-        JPanel panelJugadorUno      = this.obtenerOpcionesJugador( "Jugador (1)", this.eleccionJugadorUno );
+        this.eleccionJugadorUno         = new ButtonGroup();
+        JPanel panelJugadorUno          = this.obtenerOpcionesJugador( "Jugador (1)", this.eleccionJugadorUno );
 
-        this.eleccionJugadorDos     = new ButtonGroup();
-        JPanel panelJugadorDos      = this.obtenerOpcionesJugador( "Jugador (2)", this.eleccionJugadorDos );
+        this.eleccionJugadorDos         = new ButtonGroup();
+        JPanel panelJugadorDos          = this.obtenerOpcionesJugador( "Jugador (2)", this.eleccionJugadorDos );
 
-        JPanel panelAlgoritmo   = this.obtenerOpcionesAlgoritmo();        
+        this.eleccionAlgoritmoJugador1  = new ButtonGroup();
+        this.eleccionAlgoritmoJugador2  = new ButtonGroup();
+        
+        JPanel panelAlgoritmo   = this.obtenerOpcionesAlgoritmo( "Algoritmo para Jugador (1)", this.eleccionAlgoritmoJugador1 );
+        JPanel panelAlgoritmo2  = this.obtenerOpcionesAlgoritmo( "Algoritmo para Jugador (2)", this.eleccionAlgoritmoJugador2 );
+
 
         JPanel panelFicha   = this.obtenerOpcionesFichas();
 
@@ -277,7 +292,8 @@ public class OthelloGUI extends JFrame implements GUI{
         panel.add( panelJugadorUno );
         panel.add( panelJugadorDos );
         panel.add( panelFicha );
-        panel.add( panelAlgoritmo );        
+        panel.add( panelAlgoritmo );
+        panel.add( panelAlgoritmo2 );
         panel.add( panelVarios );
         panel.add( new JSeparator() );
         panel.add( this.obtenerBotonConfiguracionLista() );
@@ -356,7 +372,7 @@ public class OthelloGUI extends JFrame implements GUI{
         return( boton );
     }
 
-    private JPanel obtenerOpcionesAlgoritmo(){
+    private JPanel obtenerOpcionesAlgoritmo( String titulo, ButtonGroup eleccionAlgoritmo ){
     // ----------------------------------------------------------------------
 
         JPanel panel;
@@ -379,12 +395,12 @@ public class OthelloGUI extends JFrame implements GUI{
         aleatorio.setMnemonic(KeyEvent.VK_A );
         aleatorio.setActionCommand( ConstanteOthello.ALGORITMO_ALEATORIO );
 
-        this.eleccionAlgoritmo = new ButtonGroup();
-        this.eleccionAlgoritmo.add( minimax      );
-        this.eleccionAlgoritmo.add( alfaBeta     );
-        this.eleccionAlgoritmo.add( aleatorio    );
+        //eleccionAlgoritmo = new ButtonGroup();
+        eleccionAlgoritmo.add( minimax      );
+        eleccionAlgoritmo.add( alfaBeta     );
+        eleccionAlgoritmo.add( aleatorio    );
 
-        panel.add( new JLabel( "Algoritmo" ) );
+        panel.add( new JLabel( titulo ) );
         panel.add( new JSeparator() );
         panel.add( minimax      );
         panel.add( alfaBeta     );
@@ -477,10 +493,14 @@ public class OthelloGUI extends JFrame implements GUI{
         panel.setSize( 150, 10 );
         //panel.setLayout( new BoxLayout( panel, BoxLayout.X_AXIS ) );
 
-        this.eleccionProfundidad = new JTextField( "3", 15 );
+        this.eleccionProfundidadAlgoritmo1 = new JTextField( "3", 5 );
+        this.eleccionProfundidadAlgoritmo2 = new JTextField( "3", 5 );
 
-        panel.add(  new JLabel( "Profundidad" ) );
-        panel.add(  this.eleccionProfundidad    );
+        panel.add(  new JLabel( "Profundidad (Jugador 1)" ) );
+        panel.add(  this.eleccionProfundidadAlgoritmo1    );
+
+        panel.add(  new JLabel( "Profundidad (Jugador 2)" ) );
+        panel.add(  this.eleccionProfundidadAlgoritmo2    );
 
         return( panel );
     }
