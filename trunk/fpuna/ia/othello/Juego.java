@@ -1,10 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
  */
 
 package fpuna.ia.othello;
 
+import fpuna.ia.othello.Utils.Casilla;
 import fpuna.ia.othello.Utils.Tablero;
 import fpuna.ia.othello.jugador.Jugador;
 
@@ -36,6 +35,12 @@ public class Juego extends Thread{
     }
     /*************************************************************************/
 
+    
+    /**
+     * Duerme al hilo por un rato (generalemente, cerca de 1 segundo)
+     *
+     * @autor gusamasan
+     */
     public static void esperarUnRato(){
         try{
             Thread.sleep( 800 );
@@ -45,43 +50,95 @@ public class Juego extends Thread{
         }
     }
 
+
+    /**
+     * Regorna el objeto que representa al jugador con ficha blanca
+     *
+     * @return  instancia de la clase <code>Jugador</code> que representa
+     *          al jugador
+     */
     public Jugador getJugadorConFichaBlanca() {
         return jugadorConFichaBlanca;
     }
 
+    /**
+     * Asigna el objeto que representa al jugador con ficha blanca
+     *
+     * @param  instancia de la clase <code>Jugador</code> que representa
+     *          al jugador
+     */
     public void setJugadorConFichaBlanca(Jugador jugadorConFichaBlanca) {
         this.jugadorConFichaBlanca = jugadorConFichaBlanca;
     }
 
+
+    /**
+     * Regorna el objeto que representa al jugador con ficha negra
+     *
+     * @return  instancia de la clase <code>Jugador</code> que representa
+     *          al jugador
+     */
     public Jugador getJugadorConFichaNegra() {
         return jugadorConFichaNegra;
     }
 
+    /**
+     * Asigna el objeto que representa al jugador con ficha negra
+     *
+     * @param  instancia de la clase <code>Jugador</code> que representa
+     *          al jugador
+     */
     public void setJugadorConFichaNegra(Jugador jugadorConFichaNegra) {
         this.jugadorConFichaNegra = jugadorConFichaNegra;
     }
 
+    /**
+     * Retorna el jugador de turno
+     *
+     * @return  instancia de la clase <code>Jugador</code> que representa
+     *          al jugador
+     */
     public Jugador getJugadorDeTurno() {
         return jugadorDeTurno;
     }
 
+
+    /**
+     * Asigna el objeto que representa al jugador de turno
+     *
+     * @param  instancia de la clase <code>Jugador</code> que representa
+     *          al jugador
+     */
     public void setJugadorDeTurno(Jugador jugadorDeTurno) {
         this.jugadorDeTurno = jugadorDeTurno;
     }
 
+
+    /**
+     * Indica si el juego fue parado o no
+     *
+     * @return  <code>true</code> si el juego fue parado; <code>false</code>
+     *          en caso contrario
+     */
     public boolean estaParado(){
         return( this.pararJuego );
     }
 
 
+    /**
+     * Sobreescribe el método run de Thread
+     */
     @Override
-    public void run(){
-    
+    public void run(){    
 
-        jugar();
-        
+        jugar();        
     }
 
+    /**
+     * Inicia el juego
+     *
+     * @autor gusamasan
+     */
     public void jugar(){
     // ------------------------------------------------------------------------
 
@@ -94,48 +151,43 @@ public class Juego extends Thread{
 
         while( !pararJuego ){
 
-            /**/
-            System.out.println( "********************************" );
-
-            nuevoTablero = jugadorDeTurno.getTablero();
-            nuevoTablero.imprimirTablero();
-
-            System.out.println( "*********************************" );
-
+            
             nuevoTablero = this.jugadorDeTurno.jugar(turno);
-
-            System.out.println( "##################################" );
-
-            if( nuevoTablero != null )
-                nuevoTablero.imprimirTablero();
             
-            System.out.println( "##################################" );
-            /**/
-            
-
             if( !pararJuego && nuevoTablero != null ){
-                this.intefazGUI.setTablero( nuevoTablero );
-                this.intefazGUI.refrescarTablero();
 
-                if( turno == ConstanteOthello.TURNO_FICHA_NEGRA ){
+                
+                    this.intefazGUI.setTablero( nuevoTablero );
+                    this.intefazGUI.refrescarTablero();
 
-                    this.jugadorDeTurno = this.jugadorConFichaBlanca;
-                    this.intefazGUI.avisarTurnoFichaBlanca();
+                    if( turno == ConstanteOthello.TURNO_FICHA_NEGRA ){
 
-                    turno = ConstanteOthello.TURNO_FICHA_BLANCA;
+                        this.jugadorDeTurno = this.jugadorConFichaBlanca;
+                        this.intefazGUI.avisarTurnoFichaBlanca();
 
-                    this.tableroFichaNegra = nuevoTablero;
-                }
-                else{
-                    this.jugadorDeTurno = this.jugadorConFichaNegra;
-                    this.intefazGUI.avisarTurnoFichaNegra();
+                        turno = ConstanteOthello.TURNO_FICHA_BLANCA;
 
-                    turno = ConstanteOthello.TURNO_FICHA_NEGRA;
+                        this.tableroFichaNegra = nuevoTablero;
+                    }
+                    else{
+                        this.jugadorDeTurno = this.jugadorConFichaNegra;
+                        this.intefazGUI.avisarTurnoFichaNegra();
 
-                    this.tableroFichaBlanca = nuevoTablero;
-                }
+                        turno = ConstanteOthello.TURNO_FICHA_NEGRA;
 
-                this.jugadorDeTurno.setTablero( nuevoTablero );
+                        this.tableroFichaBlanca = nuevoTablero;
+                    }
+
+                    if( nuevoTablero.EsFinalDeJuego() ){
+                        pararJuego = true;
+                        
+                        this.intefazGUI.avisarFinalizacionDelJuego(  nuevoTablero.Puntos( Casilla.FICHA_NEGRA ) ,
+                                                                 nuevoTablero.Puntos( Casilla.FICHA_BLANCA)
+                                                                );
+                    }
+
+                    this.jugadorDeTurno.setTablero( nuevoTablero );
+                                  
            }
            else{ // pasa de turno
 
@@ -165,6 +217,9 @@ public class Juego extends Thread{
         }
     }
 
+    /**
+     * Envía una señal al juego de tal manera a que cese la ejecución
+     */
     public void pararJuego(){
         this.pararJuego = true;
     }
