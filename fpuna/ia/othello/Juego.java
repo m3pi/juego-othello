@@ -38,7 +38,7 @@ public class Juego extends Thread{
 
     public static void esperarUnRato(){
         try{
-            Thread.sleep( 2000 );
+            Thread.sleep( 800 );
         }
         catch( Exception e ){
             e.printStackTrace();
