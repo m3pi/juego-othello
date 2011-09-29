@@ -56,6 +56,29 @@ public class OthelloGUI extends JFrame implements GUI{
     }
     /********************************************************************/
 
+    public void avisarFinalizacionDelJuego( int cantidadFichasNegras ,
+                                            int cantidadFichasBlancas ){
+    // ------------------------------------------------------------------------
+
+        int diferencia;
+
+    // ------------------------------------------------------------------------
+
+        diferencia  = cantidadFichasNegras - cantidadFichasBlancas;
+
+        if( diferencia > 0 ){
+            javax.swing.JOptionPane.showMessageDialog( this, 
+            "¡El jugador con fichas NEGRAS es el ganador! con " + diferencia + " fichas a favor" );
+        }
+        else if( diferencia < 0 ){
+            javax.swing.JOptionPane.showMessageDialog( this,
+            "¡El jugador con fichas BLANCAS es el ganador! con " + ( -diferencia ) + " fichas a favor" );
+        }
+        else
+            javax.swing.JOptionPane.showMessageDialog( this,
+            "¡¡¡Empate....!!!" );
+    }
+        
     public void avisarTurnoFichaBlanca(){
         this.senialTurno.mostrarFichaBlanca();
     }

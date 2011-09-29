@@ -14,6 +14,8 @@ import fpuna.ia.othello.Utils.Tablero;
  */
 public interface GUI {
 
+    public void avisarFinalizacionDelJuego( int cantidadFichasNegras, int cantidadFichasBlancas );
+    
     public void avisarTurnoFichaBlanca();
 
     public void avisarTurnoFichaNegra();
