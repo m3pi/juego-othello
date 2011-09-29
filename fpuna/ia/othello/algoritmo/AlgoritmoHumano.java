@@ -32,7 +32,7 @@ public class AlgoritmoHumano extends Algoritmo{
 
         System.out.println( "analizando siguiente jugada con HUMANO" );
 
-        tablero.ponerFicha( this.casillaJugada );
+        while(!tablero.ponerFicha( this.casillaJugada ));
 
         return( tablero );
     }
