@@ -32,7 +32,7 @@ public class AlgoritmoMinimax extends Algoritmo{
         this.playerColor=turno;
         Tablero tableroJugada=tablero.copiarTablero();
          try{
-            MiniMax(tableroJugada, 3, turno);
+            MiniMax(tableroJugada, this.getProfundidad(), turno);
             Thread.sleep( 1000 );
         }
         catch( Exception e ){

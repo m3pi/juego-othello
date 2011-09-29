@@ -33,14 +33,14 @@ public class AlgoritmoPodaAlfaBeta extends Algoritmo{
          try{
              int beta = Integer.MAX_VALUE;
              int alfa = Integer.MIN_VALUE;
-             AlfaBeta(tableroJugada, 3, playerColor, alfa, beta);
+             AlfaBeta(tableroJugada, this.getProfundidad(), playerColor, alfa, beta);
             Thread.sleep( 1000 );
         }
         catch( Exception e ){
             e.printStackTrace();
         }
 
-        return( tablero );
+        return( tableroJugada );
     }
 
      public int AlfaBeta(Tablero tablero, int prof, int jugadorActual, int alfa, int beta)
