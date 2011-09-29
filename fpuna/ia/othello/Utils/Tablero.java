@@ -285,6 +285,21 @@ public class Tablero {
             return true;
     }
 
+
+      public  int Puntos(int playerColor)
+      {
+            int points = 0;
+
+            for (int x = 0; x < Tablero.CANTIDAD_FILAS_DEFECTO; x++)
+                for (int y = 0; y < Tablero.CANTIDAD_COLUMNAS_DEFECTO; y++)
+                    if (matrizTablero[x][y].obtenerColorFicha() == playerColor)
+                    {
+                        points++;
+                    }
+
+            return points;
+     }
+
     public boolean  PuedeJugar(int player)
       {
         int x;
