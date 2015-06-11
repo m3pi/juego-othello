@@ -1,0 +1,1 @@
+Othello es un juego muy similar al Reversi; se utilizará para aplicar estrategias tales como MiniMax y Poda AlfaBeta.
